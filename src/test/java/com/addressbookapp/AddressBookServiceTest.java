@@ -124,4 +124,26 @@ public class AddressBookServiceTest {
 
         assertEquals(1, result.size());
     }
+    
+    @Test
+    public void givenCity_whenCounted_shouldReturnCorrectCount() {
+
+        AddressBookService service = new AddressBookService();
+        service.createAddressBook("Family");
+
+        ContactPerson c1 = new ContactPerson(
+                "AP","Sharma","","Mumbai","Maharashtra","","",""
+        );
+
+        ContactPerson c2 = new ContactPerson(
+                "Rahul","Verma","","Mumbai","Maharashtra","","",""
+        );
+
+        service.addContact("Family", c1);
+        service.addContact("Family", c2);
+
+        long count = service.getCountByCity("Mumbai");
+
+        assertEquals(2, count);
+    }
 }
