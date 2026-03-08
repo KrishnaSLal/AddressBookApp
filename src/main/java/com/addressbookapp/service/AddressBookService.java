@@ -144,5 +144,46 @@ public class AddressBookService {
                 .thenComparing(ContactPerson::getLastName))
                 .collect(Collectors.toList());
     }
+    
+    //UC12
+    
+    public List<ContactPerson> sortByCity(String bookName) {
+
+        List<ContactPerson> contacts = addressBooks.get(bookName);
+
+        if (contacts == null) {
+            return new ArrayList<>();
+        }
+
+        return contacts.stream()
+                .sorted(Comparator.comparing(ContactPerson::getCity))
+                .collect(Collectors.toList());
+    }
+    
+    public List<ContactPerson> sortByState(String bookName) {
+
+        List<ContactPerson> contacts = addressBooks.get(bookName);
+
+        if (contacts == null) {
+            return new ArrayList<>();
+        }
+
+        return contacts.stream()
+                .sorted(Comparator.comparing(ContactPerson::getState))
+                .collect(Collectors.toList());
+    }
+    
+    public List<ContactPerson> sortByZip(String bookName) {
+
+        List<ContactPerson> contacts = addressBooks.get(bookName);
+
+        if (contacts == null) {
+            return new ArrayList<>();
+        }
+
+        return contacts.stream()
+                .sorted(Comparator.comparing(ContactPerson::getZip))
+                .collect(Collectors.toList());
+    }
 
 }

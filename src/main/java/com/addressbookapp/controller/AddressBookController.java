@@ -80,6 +80,19 @@ public class AddressBookController {
 
         return service.sortByName(bookName);
     }
+    
+    @GetMapping("/sort/city")
+    public List<ContactPerson> sortByCity(@RequestParam String bookName) {
+        return service.sortByCity(bookName);
+    }
+    @GetMapping("/sort/state")
+    public List<ContactPerson> sortByState(@RequestParam String bookName) {
+        return service.sortByState(bookName);
+    }
+    @GetMapping("/sort/zip")
+    public List<ContactPerson> sortByZip(@RequestParam String bookName) {
+        return service.sortByZip(bookName);
+    }
 
     // Edit Contact
     @PutMapping("/edit")
