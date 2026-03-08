@@ -319,4 +319,18 @@ public class AddressBookServiceTest {
 
         assertTrue(file.exists());
     }
+    
+    @Test
+    void givenContact_whenSaved_shouldReturnSavedContact() {
+
+        ContactPerson person = new ContactPerson(
+                "Rahul","Sharma","Street1",
+                "Mumbai","MH","400001",
+                "9876543210","rahul@gmail.com"
+        );
+
+        ContactPerson saved = service.saveContact(person);
+
+        assertNotNull(saved);
+    }
 }
