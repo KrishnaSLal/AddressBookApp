@@ -23,6 +23,33 @@ import java.util.stream.Collectors;
 @Service
 public class AddressBookService {
 	
+	//UC6
+	
+	private static final String JSON_STREAM_FILE = "addressbook-stream.json";
+	public void writeToJsonUsingStream() throws Exception {
+
+	    List<ContactPerson> persons = addressBooks.values()
+	            .stream()
+	            .flatMap(List::stream)
+	            .collect(Collectors.toList());
+
+	    mapper.writeValue(new File(JSON_STREAM_FILE), persons);
+	}
+	
+	public void readFromJsonUsingStream() throws Exception {
+
+	    File file = new File(JSON_STREAM_FILE);
+
+	    if (!file.exists()) return;
+
+	    List<ContactPerson> persons = mapper.readValue(
+	            file,
+	            new TypeReference<List<ContactPerson>>() {}
+	    );
+
+	    persons.forEach(person -> addContact("Default", person));
+	}
+	
 	//UC15
 	
 	public void writeToCSVUsingStream() throws Exception {
