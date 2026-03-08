@@ -169,4 +169,24 @@ public class AddressBookServiceTest {
         assertEquals("Anita", sorted.get(1).getFirstName());
         assertEquals("Rahul", sorted.get(2).getFirstName());
     }
+    
+    @Test
+    public void givenContacts_whenSortedByCity_shouldReturnSortedList() {
+
+        AddressBookService service = new AddressBookService();
+
+        service.createAddressBook("Family");
+
+        ContactPerson c1 = new ContactPerson("Rahul","Verma","","Delhi","Delhi","110001","","");
+        ContactPerson c2 = new ContactPerson("AP","Sharma","","Mumbai","Maharashtra","400001","","");
+        ContactPerson c3 = new ContactPerson("Anita","Singh","","Bangalore","Karnataka","560001","","");
+
+        service.addContact("Family", c1);
+        service.addContact("Family", c2);
+        service.addContact("Family", c3);
+
+        List<ContactPerson> sorted = service.sortByCity("Family");
+
+        assertEquals("Bangalore", sorted.get(0).getCity());
+    }
 }
