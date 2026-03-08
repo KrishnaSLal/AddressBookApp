@@ -74,6 +74,12 @@ public class AddressBookController {
     public long countByState(@RequestParam String state) {
         return service.getCountByState(state);
     }
+    
+    @GetMapping("/sort/name")
+    public List<ContactPerson> sortByName(@RequestParam String bookName) {
+
+        return service.sortByName(bookName);
+    }
 
     // Edit Contact
     @PutMapping("/edit")

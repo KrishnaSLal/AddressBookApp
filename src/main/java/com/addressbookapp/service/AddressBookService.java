@@ -3,6 +3,8 @@ package com.addressbookapp.service;
 import com.addressbookapp.model.ContactPerson;
 import java.util.*;
 import org.springframework.stereotype.Service;
+import java.util.Comparator;
+import java.util.stream.Collectors;
 
 @Service
 public class AddressBookService {
@@ -124,6 +126,23 @@ public class AddressBookService {
     
     public long getCountByState(String state) {
         return stateMap.getOrDefault(state, new ArrayList<>()).size();
+    }
+    
+    //UC11
+
+
+    public List<ContactPerson> sortByName(String bookName) {
+
+        List<ContactPerson> contacts = addressBooks.get(bookName);
+
+        if (contacts == null) {
+            return new ArrayList<>();
+        }
+
+        return contacts.stream()
+                .sorted(Comparator.comparing(ContactPerson::getFirstName)
+                .thenComparing(ContactPerson::getLastName))
+                .collect(Collectors.toList());
     }
 
 }
