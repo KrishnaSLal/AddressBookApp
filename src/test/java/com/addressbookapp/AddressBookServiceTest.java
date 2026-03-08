@@ -3,6 +3,10 @@ package com.addressbookapp;
 import com.addressbookapp.model.ContactPerson;
 import com.addressbookapp.service.AddressBookService;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import java.io.File;
+
 import static org.junit.jupiter.api.Assertions.*;
 import java.util.List;
 
@@ -188,5 +192,77 @@ public class AddressBookServiceTest {
         List<ContactPerson> sorted = service.sortByCity("Family");
 
         assertEquals("Bangalore", sorted.get(0).getCity());
+    }
+    
+    private AddressBookService service;
+
+    @BeforeEach
+    void setUp() {
+        service = new AddressBookService();
+    }
+
+    // UC13 Test 1 : Save AddressBook to file
+    @Test
+    void givenAddressBook_whenSaved_shouldCreateFile() throws Exception {
+
+        ContactPerson contact = new ContactPerson();
+        contact.setFirstName("Rahul");
+        contact.setLastName("Sharma");
+        contact.setCity("Mumbai");
+        contact.setState("Maharashtra");
+
+        service.addContact("Family", contact);
+
+        service.saveToFile();
+
+        File file = new File("addressbook-data.json");
+
+        assertTrue(file.exists());
+    }
+
+    // UC13 Test 2 : Load AddressBook from file
+    @Test
+    void givenSavedFile_whenLoaded_shouldReturnContacts() throws Exception {
+
+        ContactPerson contact = new ContactPerson();
+        contact.setFirstName("Amit");
+        contact.setLastName("Verma");
+        contact.setCity("Delhi");
+        contact.setState("Delhi");
+
+        service.addContact("Friends", contact);
+
+        service.saveToFile();
+
+        AddressBookService newService = new AddressBookService();
+
+        newService.loadFromFile();
+
+        assertNotNull(newService.getContacts("Friends"));
+        assertFalse(newService.getContacts("Friends").isEmpty());
+    }
+
+    // UC13 Test 3 : File should contain saved data
+    @Test
+    void givenContacts_whenSavedAndLoaded_shouldMatchData() throws Exception {
+
+        ContactPerson contact = new ContactPerson();
+        contact.setFirstName("Anita");
+        contact.setLastName("Nair");
+        contact.setCity("Kochi");
+        contact.setState("Kerala");
+
+        service.addContact("Work", contact);
+
+        service.saveToFile();
+
+        AddressBookService newService = new AddressBookService();
+
+        newService.loadFromFile();
+
+        ContactPerson loadedContact = newService.getContacts("Work").get(0);
+
+        assertEquals("Anita", loadedContact.getFirstName());
+        assertEquals("Kochi", loadedContact.getCity());
     }
 }
