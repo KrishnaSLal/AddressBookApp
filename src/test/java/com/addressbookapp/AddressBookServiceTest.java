@@ -66,4 +66,26 @@ public class AddressBookServiceTest {
 
         assertFalse(result);
     }
+    
+    @Test
+    public void givenDuplicateContact_whenAdded_shouldReturnFalse() {
+
+        AddressBookService service = new AddressBookService();
+
+        service.createAddressBook("Family");
+
+        ContactPerson contact1 = new ContactPerson(
+                "AP","Sharma","","","","","",""
+        );
+
+        ContactPerson contact2 = new ContactPerson(
+                "AP","Sharma","","","","","",""
+        );
+
+        service.addContact("Family", contact1);
+
+        boolean result = service.addContact("Family", contact2);
+
+        assertFalse(result);
+    }
 }
