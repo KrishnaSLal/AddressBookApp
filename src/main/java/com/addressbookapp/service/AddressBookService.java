@@ -1,5 +1,6 @@
 package com.addressbookapp.service;
 
+import com.addressbookapp.dto.ContactDTO;
 import com.addressbookapp.model.ContactPerson;
 import java.util.*;
 import org.springframework.stereotype.Service;
@@ -22,6 +23,26 @@ import com.addressbookapp.repository.ContactPersonRepository;
 
 @Service
 public class AddressBookService {
+	
+	
+	//UC19
+	
+	public ContactPerson updateContact(Long id, ContactDTO dto) {
+
+	    ContactPerson contact = repository.findById(id)
+	            .orElseThrow(() -> new RuntimeException("Contact not found"));
+
+	    contact.setFirstName(dto.getFirstName());
+	    contact.setLastName(dto.getLastName());
+	    contact.setAddress(dto.getAddress());
+	    contact.setCity(dto.getCity());
+	    contact.setState(dto.getState());
+	    contact.setZip(dto.getZip());
+	    contact.setPhoneNumber(dto.getPhoneNumber());
+	    contact.setEmail(dto.getEmail());
+
+	    return repository.save(contact);
+	}
 	
 	private final ContactPersonRepository repository;
 	

@@ -1,7 +1,11 @@
 package com.addressbookapp.controller;
 
+import com.addressbookapp.dto.ContactDTO;
 import com.addressbookapp.model.ContactPerson;
 import com.addressbookapp.service.AddressBookService;
+
+import jakarta.validation.Valid;
+
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -70,5 +74,13 @@ public class AddressBookController {
     public String deleteContactById(@PathVariable Long id) {
         service.deleteContact(id);
         return "Contact deleted successfully";
+    }
+    
+    @PutMapping("/update/{id}")
+    public ContactPerson updateContact(
+            @PathVariable Long id,
+            @Valid @RequestBody ContactDTO dto){
+
+        return service.updateContact(id, dto);
     }
 }
