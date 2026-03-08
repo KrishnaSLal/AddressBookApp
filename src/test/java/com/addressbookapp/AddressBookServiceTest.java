@@ -80,4 +80,28 @@ public class AddressBookServiceTest {
 
         assertFalse(result);
     }
+    
+    @Test
+    public void givenMultipleContacts_whenAdded_shouldReturnCorrectCount() {
+
+        AddressBookService service = new AddressBookService();
+
+        ContactPerson c1 = new ContactPerson(
+                "AP", "Sharma", "", "", "", "", "", ""
+        );
+
+        ContactPerson c2 = new ContactPerson(
+                "Rahul", "Verma", "", "", "", "", "", ""
+        );
+
+        ContactPerson c3 = new ContactPerson(
+                "Anita", "Singh", "", "", "", "", "", ""
+        );
+
+        service.addContact(c1);
+        service.addContact(c2);
+        service.addContact(c3);
+
+        assertEquals(3, service.getAllContacts().size());
+    }
 }
