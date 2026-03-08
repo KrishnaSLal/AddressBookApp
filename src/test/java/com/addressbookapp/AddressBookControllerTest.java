@@ -1,11 +1,13 @@
 package com.addressbookapp;
 
 import com.addressbookapp.controller.AddressBookController;
+import com.addressbookapp.dto.ContactDTO;
 import com.addressbookapp.model.ContactPerson;
 import com.addressbookapp.service.AddressBookService;
 import com.fasterxml.jackson.databind.ObjectMapper;
 
 import org.junit.jupiter.api.Test;
+import org.mockito.Mockito;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.mock.mockito.MockBean;
@@ -19,6 +21,8 @@ import static org.mockito.Mockito.when;
 import static org.mockito.Mockito.doNothing;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+import static org.mockito.ArgumentMatchers.*;
+
 
 @WebMvcTest(AddressBookController.class)
 public class AddressBookControllerTest {
@@ -117,5 +121,28 @@ public class AddressBookControllerTest {
         mockMvc.perform(delete("/addressbook/delete/1"))
                 .andExpect(status().isOk())
                 .andExpect(content().string("Contact deleted successfully"));
+    }
+ // UC19 Test – Update Contact
+    @Test
+    void givenContact_whenUpdated_shouldReturnUpdatedContact() throws Exception {
+
+        ContactDTO dto = new ContactDTO();
+        dto.setFirstName("Rahul");
+        dto.setLastName("Sharma");
+
+        ContactPerson updated = new ContactPerson(
+                "Rahul","Sharma","Street1",
+                "Mumbai","MH","400001",
+                "9876543210","rahul@test.com"
+        );
+
+        when(service.updateContact(Mockito.eq(1L), Mockito.any(ContactDTO.class)))
+        .thenReturn(updated);
+
+        mockMvc.perform(put("/addressbook/update/1")
+                .contentType(MediaType.APPLICATION_JSON)
+                .content(mapper.writeValueAsString(dto)))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.firstName").value("Rahul"));
     }
 }
