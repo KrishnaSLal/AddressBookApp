@@ -18,8 +18,7 @@ public class AddressBookController {
 
     // Create Address Book
     @PostMapping("/createBook")
-    public String createBook(@RequestParam String bookName) {
-
+    public String createAddressBook(@RequestParam String bookName) {
         service.createAddressBook(bookName);
         return "Address Book Created";
     }
@@ -27,33 +26,16 @@ public class AddressBookController {
     // Add Contact
     @PostMapping("/add")
     public String addContact(@RequestParam String bookName,
-                             @RequestBody ContactPerson contact) {
+                             @RequestBody ContactPerson person) {
 
-        boolean added = service.addContact(bookName, contact);
-
-        if (added) {
-            return "Contact Added Successfully";
-        } else {
-            return "Duplicate Contact Found";
-        }
+        service.addContact(bookName, person);
+        return "Contact Added Successfully";
     }
 
     // View Contacts
     @GetMapping("/contacts")
     public List<ContactPerson> getContacts(@RequestParam String bookName) {
         return service.getContacts(bookName);
-    }
-
-    // Edit Contact
-    @PutMapping("/edit")
-    public String editContact(@RequestParam String bookName,
-                              @RequestParam String firstName,
-                              @RequestParam String lastName,
-                              @RequestBody ContactPerson updatedContact) {
-
-        boolean updated = service.editContact(bookName, firstName, lastName, updatedContact);
-
-        return updated ? "Contact Updated" : "Contact Not Found";
     }
 
     // Delete Contact
@@ -64,94 +46,29 @@ public class AddressBookController {
 
         boolean deleted = service.deleteContact(bookName, firstName, lastName);
 
-        return deleted ? "Contact Deleted" : "Contact Not Found";
+        if (deleted) {
+            return "Contact Deleted";
+        } else {
+            return "Contact Not Found";
+        }
     }
 
-    // Search by City
-    @GetMapping("/search/city")
-    public List<ContactPerson> searchByCity(@RequestParam String city) {
-        return service.searchByCity(city);
-    }
-
-    // Search by State
-    @GetMapping("/search/state")
-    public List<ContactPerson> searchByState(@RequestParam String state) {
-        return service.searchByState(state);
-    }
-
-    // View persons by city
-    @GetMapping("/view/city")
-    public List<ContactPerson> viewPersonsByCity(@RequestParam String city) {
-        return service.getPersonsByCity(city);
-    }
-
-    // View persons by state
-    @GetMapping("/view/state")
-    public List<ContactPerson> viewPersonsByState(@RequestParam String state) {
-        return service.getPersonsByState(state);
-    }
-
-    // Count by city
-    @GetMapping("/count/city")
-    public long countByCity(@RequestParam String city) {
-        return service.getCountByCity(city);
-    }
-
-    // Count by state
-    @GetMapping("/count/state")
-    public long countByState(@RequestParam String state) {
-        return service.getCountByState(state);
-    }
-
-    // Sort by Name
-    @GetMapping("/sort/name")
-    public List<ContactPerson> sortByName(@RequestParam String bookName) {
-        return service.sortByName(bookName);
-    }
-
-    // Sort by City
-    @GetMapping("/sort/city")
-    public List<ContactPerson> sortByCity(@RequestParam String bookName) {
-        return service.sortByCity(bookName);
-    }
-
-    // Sort by State
-    @GetMapping("/sort/state")
-    public List<ContactPerson> sortByState(@RequestParam String bookName) {
-        return service.sortByState(bookName);
-    }
-
-    // Sort by Zip
-    @GetMapping("/sort/zip")
-    public List<ContactPerson> sortByZip(@RequestParam String bookName) {
-        return service.sortByZip(bookName);
-    }
-
-    // Save JSON
+    // Save contact (DB)
     @PostMapping("/save")
-    public String saveAddressBook() throws Exception {
-        service.saveToFile();
-        return "AddressBook saved to file";
+    public ContactPerson saveContact(@RequestBody ContactPerson person) {
+        return service.saveContact(person);
     }
 
-    // Load JSON
-    @GetMapping("/load")
-    public String loadAddressBook() throws Exception {
-        service.loadFromFile();
-        return "AddressBook loaded from file";
+    // Get all contacts
+    @GetMapping("/all")
+    public List<ContactPerson> getAllContacts() {
+        return service.getAllContacts();
     }
 
-    // Export CSV
-    @PostMapping("/export-csv")
-    public String exportCSV() throws Exception {
-        service.writeToCSV();
-        return "Contacts exported to CSV";
-    }
-
-    // Import CSV
-    @GetMapping("/import-csv")
-    public String importCSV() throws Exception {
-        service.readFromCSV();
-        return "Contacts loaded from CSV";
+    // Delete by ID
+    @DeleteMapping("/delete/{id}")
+    public String deleteContactById(@PathVariable Long id) {
+        service.deleteContact(id);
+        return "Contact deleted successfully";
     }
 }

@@ -33,7 +33,13 @@ public class ContactPerson {
         this.email = email;
     }
 
-    public String getFirstName() { return firstName; }
+    public ContactPerson(String string, String string2, String string3, String string4, String string5, String string6,
+			String string7) {
+		// TODO Auto-generated constructor stub
+	}
+
+
+	public String getFirstName() { return firstName; }
     public void setFirstName(String firstName) { this.firstName = firstName; }
 
     public String getLastName() { return lastName; }
