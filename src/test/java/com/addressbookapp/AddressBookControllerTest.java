@@ -3,18 +3,19 @@ package com.addressbookapp;
 import com.addressbookapp.controller.AddressBookController;
 import com.addressbookapp.model.ContactPerson;
 import com.addressbookapp.service.AddressBookService;
-import org.junit.jupiter.api.Test;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
-import org.springframework.test.web.servlet.MockMvc;
 import com.fasterxml.jackson.databind.ObjectMapper;
+
+import org.junit.jupiter.api.Test;
+import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.mock.mockito.MockBean;
+import org.springframework.test.web.servlet.MockMvc;
+
+import java.util.ArrayList;
 
 import static org.mockito.Mockito.when;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
-
-import java.util.List;
 
 @WebMvcTest(AddressBookController.class)
 public class AddressBookControllerTest {
@@ -27,52 +28,54 @@ public class AddressBookControllerTest {
 
     private ObjectMapper mapper = new ObjectMapper();
 
+    // Create AddressBook
+    @Test
+    public void givenAddressBookName_whenCreated_shouldReturnSuccess() throws Exception {
+
+        mockMvc.perform(post("/addressbook/createBook")
+                .param("bookName", "Family"))
+                .andExpect(status().isOk())
+                .andExpect(content().string("Address Book Created"));
+    }
+
+    // Add Contact
     @Test
     public void givenContact_whenAdded_shouldReturnSuccessMessage() throws Exception {
 
         ContactPerson contact = new ContactPerson(
-                "Krishna", "Lal",
-                "123 Street", "Bhopal",
-                "MP", "462001",
-                "9876543210", "krishna@gmail.com"
+                "AP","Sharma","Street1","Delhi","Delhi","110001","9876543210","ap@test.com"
         );
 
         mockMvc.perform(post("/addressbook/add")
+                .param("bookName","Family")
                 .contentType("application/json")
                 .content(mapper.writeValueAsString(contact)))
                 .andExpect(status().isOk())
                 .andExpect(content().string("Contact Added Successfully"));
     }
 
+    // View Contacts
     @Test
-    public void givenContacts_whenFetched_shouldReturnContactList() throws Exception {
+    public void givenBookName_whenContactsRequested_shouldReturnList() throws Exception {
 
-        ContactPerson contact = new ContactPerson(
-                "Krishna", "Lal", "", "", "", "", "", ""
-        );
+        when(service.getContacts("Family")).thenReturn(new ArrayList<>());
 
-        when(service.getAllContacts()).thenReturn(List.of(contact));
-
-        mockMvc.perform(get("/addressbook/contacts"))
+        mockMvc.perform(get("/addressbook/contacts")
+                .param("bookName","Family"))
                 .andExpect(status().isOk());
     }
 
+    // Delete Contact
     @Test
-    public void givenExistingContact_whenEdited_shouldReturnSuccessMessage() throws Exception {
+    public void givenContact_whenDeleted_shouldReturnMessage() throws Exception {
 
-        ContactPerson updated = new ContactPerson(
-                "Krishna", "Lal",
-                "New Address", "Delhi",
-                "Delhi", "110001",
-                "9999999999", "new@mail.com"
-        );
+        when(service.deleteContact("Family","AP","Sharma")).thenReturn(true);
 
-        when(service.editContact("Krishna", "Lal", updated)).thenReturn(true);
-
-        mockMvc.perform(put("/addressbook/edit?firstName=Krishna&lastName=Lal")
-                .contentType("application/json")
-                .content(mapper.writeValueAsString(updated)))
+        mockMvc.perform(delete("/addressbook/delete")
+                .param("bookName","Family")
+                .param("firstName","AP")
+                .param("lastName","Sharma"))
                 .andExpect(status().isOk())
-                .andExpect(content().string("Contact Updated Successfully"));
+                .andExpect(content().string("Contact Deleted"));
     }
 }

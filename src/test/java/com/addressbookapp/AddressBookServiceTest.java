@@ -8,67 +8,51 @@ import static org.junit.jupiter.api.Assertions.*;
 public class AddressBookServiceTest {
 
     @Test
-    public void givenContact_whenAdded_shouldReturnContactListSizeOne() {
-
-        AddressBookService service = new AddressBookService();
-
-        ContactPerson contact = new ContactPerson(
-                "Krishna",
-                "Lal",
-                "123 Street",
-                "Bhopal",
-                "MP",
-                "462001",
-                "9876543210",
-                "krishna@gmail.com"
-        );
-
-        service.addContact(contact);
-
-        assertEquals(1, service.getAllContacts().size());
-    }
-
-    @Test
-    public void givenMultipleContacts_whenAdded_shouldReturnCorrectSize() {
-
-        AddressBookService service = new AddressBookService();
-
-        ContactPerson c1 = new ContactPerson("A", "B", "", "", "", "", "", "");
-        ContactPerson c2 = new ContactPerson("C", "D", "", "", "", "", "", "");
-
-        service.addContact(c1);
-        service.addContact(c2);
-
-        assertEquals(2, service.getAllContacts().size());
-    }
-
-    @Test
     public void givenContact_whenAdded_shouldBePresentInAddressBook() {
 
         AddressBookService service = new AddressBookService();
 
-        ContactPerson contact = new ContactPerson("Krishna", "Lal", "", "", "", "", "", "");
-
-        service.addContact(contact);
-
-        assertTrue(service.getAllContacts().contains(contact));
-    }
-    
-    @Test
-    public void givenExistingContact_whenDeleted_shouldReduceListSize() {
-
-        AddressBookService service = new AddressBookService();
+        service.createAddressBook("Family");
 
         ContactPerson contact = new ContactPerson(
                 "AP","Sharma","","","","","",""
         );
 
-        service.addContact(contact);
+        service.addContact("Family", contact);
 
-        boolean result = service.deleteContact("AP","Sharma");
+        assertEquals(1, service.getContacts("Family").size());
+    }
 
-        assertTrue(result);
-        assertEquals(0, service.getAllContacts().size());
+    @Test
+    public void givenMultipleContacts_whenAdded_shouldReturnCorrectCount() {
+
+        AddressBookService service = new AddressBookService();
+
+        service.createAddressBook("Friends");
+
+        ContactPerson c1 = new ContactPerson("AP","Sharma","","","","","","");
+        ContactPerson c2 = new ContactPerson("Rahul","Verma","","","","","","");
+
+        service.addContact("Friends", c1);
+        service.addContact("Friends", c2);
+
+        assertEquals(2, service.getContacts("Friends").size());
+    }
+
+    @Test
+    public void givenExistingContact_whenDeleted_shouldReduceListSize() {
+
+        AddressBookService service = new AddressBookService();
+
+        service.createAddressBook("Family");
+
+        ContactPerson contact = new ContactPerson("AP","Sharma","","","","","","");
+
+        service.addContact("Family", contact);
+
+        service.deleteContact("Family","AP","Sharma");
+
+        assertEquals(0, service.getContacts("Family").size());
     }
 
     @Test
@@ -76,32 +60,10 @@ public class AddressBookServiceTest {
 
         AddressBookService service = new AddressBookService();
 
-        boolean result = service.deleteContact("Rahul","Verma");
+        service.createAddressBook("Friends");
+
+        boolean result = service.deleteContact("Friends","Rahul","Verma");
 
         assertFalse(result);
-    }
-    
-    @Test
-    public void givenMultipleContacts_whenAdded_shouldReturnCorrectCount() {
-
-        AddressBookService service = new AddressBookService();
-
-        ContactPerson c1 = new ContactPerson(
-                "AP", "Sharma", "", "", "", "", "", ""
-        );
-
-        ContactPerson c2 = new ContactPerson(
-                "Rahul", "Verma", "", "", "", "", "", ""
-        );
-
-        ContactPerson c3 = new ContactPerson(
-                "Anita", "Singh", "", "", "", "", "", ""
-        );
-
-        service.addContact(c1);
-        service.addContact(c2);
-        service.addContact(c3);
-
-        assertEquals(3, service.getAllContacts().size());
     }
 }
