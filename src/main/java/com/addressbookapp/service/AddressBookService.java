@@ -116,6 +116,14 @@ public class AddressBookService {
                 contact.getLastName().equals(lastName));
     }
     
-   
+   //UC10
+    
+    public long getCountByCity(String city) {
+        return cityMap.getOrDefault(city, new ArrayList<>()).size();
+    }
+    
+    public long getCountByState(String state) {
+        return stateMap.getOrDefault(state, new ArrayList<>()).size();
+    }
 
 }
