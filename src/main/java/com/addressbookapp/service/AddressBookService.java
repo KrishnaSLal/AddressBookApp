@@ -15,8 +15,56 @@ import java.io.FileWriter;
 import java.io.IOException;
 import java.io.BufferedReader;
 import java.io.FileReader;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.util.stream.Collectors;
+
+
 @Service
 public class AddressBookService {
+	
+	//UC15
+	
+	public void writeToCSVUsingStream() throws Exception {
+
+	    List<String> lines = addressBooks.values()
+	            .stream()
+	            .flatMap(List::stream)
+	            .map(person ->
+	                    person.getFirstName() + "," +
+	                    person.getLastName() + "," +
+	                    person.getAddress() + "," +
+	                    person.getCity() + "," +
+	                    person.getState() + "," +
+	                    person.getZip() + "," +
+	                    person.getPhoneNumber() + "," +
+	                    person.getEmail()
+	            )
+	            .collect(Collectors.toList());
+
+	    Files.write(Paths.get("addressbook-stream.csv"), lines);
+	}
+	
+	public void readFromCSVUsingStream() throws Exception {
+
+	    Files.lines(Paths.get("addressbook-stream.csv"))
+	            .map(line -> line.split(","))
+	            .forEach(data -> {
+
+	                ContactPerson person = new ContactPerson(
+	                        data[0],
+	                        data[1],
+	                        data[2],
+	                        data[3],
+	                        data[4],
+	                        data[5],
+	                        data[6],
+	                        data[7]
+	                );
+
+	                addContact("Default", person);
+	            });
+	}
 	
 	//UC14
 	
