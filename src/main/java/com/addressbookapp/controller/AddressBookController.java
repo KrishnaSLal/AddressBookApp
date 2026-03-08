@@ -44,6 +44,18 @@ public class AddressBookController {
 
         return service.getContacts(bookName);
     }
+    
+    @GetMapping("/search/city")
+    public List<ContactPerson> searchByCity(@RequestParam String city) {
+
+        return service.searchByCity(city);
+    }
+    
+    @GetMapping("/search/state")
+    public List<ContactPerson> searchByState(@RequestParam String state) {
+
+        return service.searchByState(state);
+    }
 
     // Edit Contact
     @PutMapping("/edit")

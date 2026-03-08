@@ -42,6 +42,24 @@ public class AddressBookService {
 
         return addressBooks.getOrDefault(bookName, new ArrayList<>());
     }
+    
+    public List<ContactPerson> searchByCity(String city) {
+
+        return addressBooks.values()
+                .stream()
+                .flatMap(List::stream)
+                .filter(contact -> contact.getCity().equalsIgnoreCase(city))
+                .toList();
+    }
+    
+    public List<ContactPerson> searchByState(String state) {
+
+        return addressBooks.values()
+                .stream()
+                .flatMap(List::stream)
+                .filter(contact -> contact.getState().equalsIgnoreCase(state))
+                .toList();
+    }
 
 
     // Edit contact
