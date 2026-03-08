@@ -11,10 +11,67 @@ import java.io.IOException;
 import java.util.List;
 import java.util.Map;
 import com.fasterxml.jackson.core.type.TypeReference;
-
-
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.BufferedReader;
+import java.io.FileReader;
 @Service
 public class AddressBookService {
+	
+	//UC14
+	
+	private static final String CSV_FILE_PATH = "addressbook-data.csv";
+	
+
+
+	public void writeToCSV() throws IOException {
+
+	    FileWriter writer = new FileWriter(CSV_FILE_PATH);
+
+	    writer.append("FirstName,LastName,Address,City,State,Zip,Phone,Email\n");
+
+	    for (String book : addressBooks.keySet()) {
+
+	        for (ContactPerson person : addressBooks.get(book)) {
+
+	            writer.append(person.getFirstName()).append(",");
+	            writer.append(person.getLastName()).append(",");
+	            writer.append(person.getAddress()).append(",");
+	            writer.append(person.getCity()).append(",");
+	            writer.append(person.getState()).append(",");
+	            writer.append(person.getZip()).append(",");
+	            writer.append(person.getPhoneNumber()).append(",");
+	            writer.append(person.getEmail()).append("\n");
+	        }
+	    }
+
+	    writer.flush();
+	    writer.close();
+	}
+
+
+	public void readFromCSV() throws IOException {
+
+	    BufferedReader reader = new BufferedReader(new FileReader(CSV_FILE_PATH));
+
+	    String line;
+
+	    reader.readLine(); // skip header
+
+	    while ((line = reader.readLine()) != null) {
+
+	        String[] data = line.split(",");
+
+	        ContactPerson person = new ContactPerson(
+	                data[0], data[1], data[2], data[3],
+	                data[4], data[5], data[6], data[7]
+	        );
+
+	        addContact("Default", person);
+	    }
+
+	    reader.close();
+	}
 	
 	//UC13
 	

@@ -45,6 +45,14 @@ public class AddressBookController {
 
         return "AddressBook saved to file";
     }
+    
+    @PostMapping("/export-csv")
+    public String exportCSV() throws Exception {
+
+        service.writeToCSV();
+
+        return "Contacts exported to CSV";
+    }
 
     // View Contacts
     @GetMapping("/contacts")
@@ -110,6 +118,14 @@ public class AddressBookController {
         return "AddressBook loaded from file";
     }
 
+    @GetMapping("/import-csv")
+    public String importCSV() throws Exception {
+
+        service.readFromCSV();
+
+        return "Contacts loaded from CSV";
+    }
+    
     // Edit Contact
     @PutMapping("/edit")
     public String editContact(@RequestParam String bookName,
