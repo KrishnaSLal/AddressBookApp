@@ -2,6 +2,8 @@ package com.addressbookapp.controller;
 
 import com.addressbookapp.model.ContactPerson;
 import com.addressbookapp.service.AddressBookService;
+
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -10,51 +12,63 @@ import java.util.List;
 @RequestMapping("/addressbook")
 public class AddressBookController {
 
-    private AddressBookService service = new AddressBookService();
+    @Autowired
+    private AddressBookService service;
 
-    // UC2 - Add Contact
+    // Create Address Book
+    @PostMapping("/createBook")
+    public String createBook(@RequestParam String bookName) {
+
+        service.createAddressBook(bookName);
+
+        return "Address Book Created";
+    }
+
+    // Add Contact
     @PostMapping("/add")
-    public String addContact(@RequestBody ContactPerson contact) {
-        service.addContact(contact);
+    public String addContact(@RequestParam String bookName,
+                             @RequestBody ContactPerson contact) {
+
+        service.addContact(bookName, contact);
+
         return "Contact Added Successfully";
     }
 
     // View Contacts
     @GetMapping("/contacts")
-    public List<ContactPerson> getContacts() {
-        return service.getAllContacts();
+    public List<ContactPerson> getContacts(@RequestParam String bookName) {
+
+        return service.getContacts(bookName);
     }
 
-    // UC3 - Edit Contact
+    // Edit Contact
     @PutMapping("/edit")
-    public String editContact(@RequestParam String firstName,
+    public String editContact(@RequestParam String bookName,
+                              @RequestParam String firstName,
                               @RequestParam String lastName,
                               @RequestBody ContactPerson updatedContact) {
 
-        boolean updated = service.editContact(firstName, lastName, updatedContact);
+        boolean updated = service.editContact(bookName, firstName, lastName, updatedContact);
 
         if (updated) {
-            return "Contact Updated Successfully";
+            return "Contact Updated";
         } else {
             return "Contact Not Found";
         }
     }
-    
+
+    // Delete Contact
     @DeleteMapping("/delete")
-    public String deleteContact(@RequestParam String firstName,
+    public String deleteContact(@RequestParam String bookName,
+                                @RequestParam String firstName,
                                 @RequestParam String lastName) {
 
-        boolean deleted = service.deleteContact(firstName, lastName);
+        boolean deleted = service.deleteContact(bookName, firstName, lastName);
 
         if (deleted) {
-            return "Contact Deleted Successfully";
+            return "Contact Deleted";
         } else {
             return "Contact Not Found";
         }
-    }
-    
-    @GetMapping("/contacts")
-    public List<ContactPerson> getAllContacts() {
-        return service.getAllContacts();
     }
 }

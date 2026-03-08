@@ -1,27 +1,45 @@
 package com.addressbookapp.service;
 
 import com.addressbookapp.model.ContactPerson;
-import java.util.ArrayList;
-import java.util.List;
+import java.util.*;
+import org.springframework.stereotype.Service;
 
+@Service
 public class AddressBookService {
 
-    private List<ContactPerson> contactList = new ArrayList<>();
+    private Map<String, List<ContactPerson>> addressBooks = new HashMap<>();
 
-    // UC2 & UC5
-    public void addContact(ContactPerson contact) {
-        contactList.add(contact);
+
+    // UC6 - Create new Address Book
+    public void createAddressBook(String bookName) {
+        addressBooks.putIfAbsent(bookName, new ArrayList<>());
     }
 
-    // View all contacts
-    public List<ContactPerson> getAllContacts() {
-        return contactList;
+
+    // Add contact to specific Address Book
+    public void addContact(String bookName, ContactPerson contact) {
+
+        addressBooks.putIfAbsent(bookName, new ArrayList<>());
+
+        addressBooks.get(bookName).add(contact);
     }
 
-    // UC3
-    public boolean editContact(String firstName, String lastName, ContactPerson updatedContact) {
 
-        for (ContactPerson contact : contactList) {
+    // View contacts from a specific Address Book
+    public List<ContactPerson> getContacts(String bookName) {
+
+        return addressBooks.getOrDefault(bookName, new ArrayList<>());
+    }
+
+
+    // Edit contact
+    public boolean editContact(String bookName, String firstName, String lastName, ContactPerson updatedContact) {
+
+        List<ContactPerson> contacts = addressBooks.get(bookName);
+
+        if (contacts == null) return false;
+
+        for (ContactPerson contact : contacts) {
 
             if (contact.getFirstName().equals(firstName) &&
                 contact.getLastName().equals(lastName)) {
@@ -40,12 +58,17 @@ public class AddressBookService {
         return false;
     }
 
-    // UC4
-    public boolean deleteContact(String firstName, String lastName) {
 
-        return contactList.removeIf(contact ->
+    // Delete contact
+    public boolean deleteContact(String bookName, String firstName, String lastName) {
+
+        List<ContactPerson> contacts = addressBooks.get(bookName);
+
+        if (contacts == null) return false;
+
+        return contacts.removeIf(contact ->
                 contact.getFirstName().equals(firstName) &&
-                contact.getLastName().equals(lastName)
-        );
+                contact.getLastName().equals(lastName));
     }
+
 }
