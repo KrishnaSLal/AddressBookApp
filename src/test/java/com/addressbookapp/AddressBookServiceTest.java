@@ -265,4 +265,22 @@ public class AddressBookServiceTest {
         assertEquals("Anita", loadedContact.getFirstName());
         assertEquals("Kochi", loadedContact.getCity());
     }
+    
+    @Test
+    void givenContacts_whenWrittenToCSV_shouldCreateFile() throws Exception {
+
+        ContactPerson person = new ContactPerson(
+                "Rahul", "Sharma", "Street 1",
+                "Mumbai", "MH", "400001",
+                "9876543210", "rahul@gmail.com"
+        );
+
+        service.addContact("Family", person);
+
+        service.writeToCSV();
+
+        File file = new File("addressbook-data.csv");
+
+        assertTrue(file.exists());
+    }
 }
