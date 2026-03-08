@@ -283,4 +283,22 @@ public class AddressBookServiceTest {
 
         assertTrue(file.exists());
     }
+    
+    @Test
+    void givenContacts_whenWrittenUsingStream_shouldCreateCSVFile() throws Exception {
+
+        ContactPerson person = new ContactPerson(
+                "Rahul","Sharma","Street1",
+                "Mumbai","MH","400001",
+                "9876543210","rahul@gmail.com"
+        );
+
+        service.addContact("Family", person);
+
+        service.writeToCSVUsingStream();
+
+        File file = new File("addressbook-stream.csv");
+
+        assertTrue(file.exists());
+    }
 }
