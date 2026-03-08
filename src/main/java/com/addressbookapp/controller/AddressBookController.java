@@ -29,9 +29,13 @@ public class AddressBookController {
     public String addContact(@RequestParam String bookName,
                              @RequestBody ContactPerson contact) {
 
-        service.addContact(bookName, contact);
+        boolean added = service.addContact(bookName, contact);
 
-        return "Contact Added Successfully";
+        if (added) {
+            return "Contact Added Successfully";
+        } else {
+            return "Duplicate Contact Found";
+        }
     }
 
     // View Contacts

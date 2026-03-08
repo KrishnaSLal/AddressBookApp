@@ -17,11 +17,23 @@ public class AddressBookService {
 
 
     // Add contact to specific Address Book
-    public void addContact(String bookName, ContactPerson contact) {
+    public boolean addContact(String bookName, ContactPerson contact) {
 
         addressBooks.putIfAbsent(bookName, new ArrayList<>());
 
-        addressBooks.get(bookName).add(contact);
+        List<ContactPerson> contacts = addressBooks.get(bookName);
+
+        for (ContactPerson c : contacts) {
+
+            if (c.getFirstName().equals(contact.getFirstName()) &&
+                c.getLastName().equals(contact.getLastName())) {
+
+                return false; // duplicate found
+            }
+        }
+
+        contacts.add(contact);
+        return true;
     }
 
 
@@ -70,5 +82,6 @@ public class AddressBookService {
                 contact.getFirstName().equals(firstName) &&
                 contact.getLastName().equals(lastName));
     }
+    
 
 }
