@@ -56,6 +56,15 @@ public class AddressBookController {
 
         return service.searchByState(state);
     }
+    
+    @GetMapping("/view/city")
+    public List<ContactPerson> viewPersonsByCity(@RequestParam String city) {
+        return service.getPersonsByCity(city);
+    }
+    @GetMapping("/view/state")
+    public List<ContactPerson> viewPersonsByState(@RequestParam String state) {
+        return service.getPersonsByState(state);
+    }
 
     // Edit Contact
     @PutMapping("/edit")

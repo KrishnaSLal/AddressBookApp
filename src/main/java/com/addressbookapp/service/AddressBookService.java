@@ -8,6 +8,9 @@ import org.springframework.stereotype.Service;
 public class AddressBookService {
 
     private Map<String, List<ContactPerson>> addressBooks = new HashMap<>();
+    private Map<String, List<ContactPerson>> cityMap = new HashMap<>();
+    private Map<String, List<ContactPerson>> stateMap = new HashMap<>();
+    
 
 
     // UC6 - Create new Address Book
@@ -20,21 +23,33 @@ public class AddressBookService {
     public boolean addContact(String bookName, ContactPerson contact) {
 
         addressBooks.putIfAbsent(bookName, new ArrayList<>());
-
         List<ContactPerson> contacts = addressBooks.get(bookName);
 
         for (ContactPerson c : contacts) {
-
             if (c.getFirstName().equals(contact.getFirstName()) &&
                 c.getLastName().equals(contact.getLastName())) {
-
-                return false; // duplicate found
+                return false;
             }
         }
 
         contacts.add(contact);
+
+        cityMap.putIfAbsent(contact.getCity(), new ArrayList<>());
+        cityMap.get(contact.getCity()).add(contact);
+
+        stateMap.putIfAbsent(contact.getState(), new ArrayList<>());
+        stateMap.get(contact.getState()).add(contact);
+
         return true;
     }
+    
+    public List<ContactPerson> getPersonsByCity(String city) {
+        return cityMap.getOrDefault(city, new ArrayList<>());
+    }
+    public List<ContactPerson> getPersonsByState(String state) {
+        return stateMap.getOrDefault(state, new ArrayList<>());
+    }
+    
 
 
     // View contacts from a specific Address Book
@@ -101,5 +116,6 @@ public class AddressBookService {
                 contact.getLastName().equals(lastName));
     }
     
+   
 
 }
