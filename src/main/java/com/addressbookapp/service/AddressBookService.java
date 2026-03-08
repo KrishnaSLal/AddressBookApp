@@ -18,10 +18,38 @@ import java.io.FileReader;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.stream.Collectors;
-
+import com.addressbookapp.repository.ContactPersonRepository;
 
 @Service
 public class AddressBookService {
+	
+	private final ContactPersonRepository repository;
+	
+    public AddressBookService(ContactPersonRepository repository) {
+        this.repository = repository;
+    }
+
+    public AddressBookService() {
+	    this.repository = null;
+	}
+    
+    public ContactPerson saveContact(ContactPerson person) {
+
+        if (repository == null) {
+            return person; // used for unit tests
+        }
+
+        return repository.save(person);
+    }
+
+    public List<ContactPerson> getAllContacts() {
+        return repository.findAll();
+    }
+
+    public void deleteContact(Long id) {
+        repository.deleteById(id);
+    }
+
 	
 	//UC6
 	
