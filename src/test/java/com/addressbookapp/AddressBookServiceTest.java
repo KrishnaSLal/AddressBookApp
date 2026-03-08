@@ -4,6 +4,7 @@ import com.addressbookapp.model.ContactPerson;
 import com.addressbookapp.service.AddressBookService;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
+import java.util.List;
 
 public class AddressBookServiceTest {
 
@@ -87,5 +88,23 @@ public class AddressBookServiceTest {
         boolean result = service.addContact("Family", contact2);
 
         assertFalse(result);
+    }
+    
+    @Test
+    public void givenCity_whenSearched_shouldReturnContacts() {
+
+        AddressBookService service = new AddressBookService();
+
+        service.createAddressBook("Family");
+
+        ContactPerson contact = new ContactPerson(
+                "AP","Sharma","","Mumbai","Maharashtra","","",""
+        );
+
+        service.addContact("Family", contact);
+
+        List<ContactPerson> result = service.searchByCity("Mumbai");
+
+        assertEquals(1, result.size());
     }
 }
