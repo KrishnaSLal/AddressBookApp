@@ -5,9 +5,39 @@ import java.util.*;
 import org.springframework.stereotype.Service;
 import java.util.Comparator;
 import java.util.stream.Collectors;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import java.io.File;
+import java.io.IOException;
+import java.util.List;
+import java.util.Map;
+import com.fasterxml.jackson.core.type.TypeReference;
+
 
 @Service
 public class AddressBookService {
+	
+	//UC13
+	
+	private static final String FILE_PATH = "addressbook-data.json";
+	private ObjectMapper mapper = new ObjectMapper();
+	
+	public void saveToFile() throws IOException {
+	    mapper.writeValue(new File(FILE_PATH), addressBooks);
+	}
+	
+	public void loadFromFile() throws IOException {
+
+	    File file = new File(FILE_PATH);
+
+	    if (!file.exists()) {
+	        return;
+	    }
+
+	    addressBooks = mapper.readValue(
+	            file,
+	            new TypeReference<Map<String, List<ContactPerson>>>() {}
+	    );
+	}
 
     private Map<String, List<ContactPerson>> addressBooks = new HashMap<>();
     private Map<String, List<ContactPerson>> cityMap = new HashMap<>();

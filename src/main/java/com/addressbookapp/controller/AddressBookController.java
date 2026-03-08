@@ -37,6 +37,14 @@ public class AddressBookController {
             return "Duplicate Contact Found";
         }
     }
+    
+    @PostMapping("/save")
+    public String saveAddressBook() throws Exception {
+
+        service.saveToFile();
+
+        return "AddressBook saved to file";
+    }
 
     // View Contacts
     @GetMapping("/contacts")
@@ -92,6 +100,14 @@ public class AddressBookController {
     @GetMapping("/sort/zip")
     public List<ContactPerson> sortByZip(@RequestParam String bookName) {
         return service.sortByZip(bookName);
+    }
+    
+    @GetMapping("/load")
+    public String loadAddressBook() throws Exception {
+
+        service.loadFromFile();
+
+        return "AddressBook loaded from file";
     }
 
     // Edit Contact
