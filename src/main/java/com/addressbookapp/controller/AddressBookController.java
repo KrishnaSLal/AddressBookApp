@@ -39,4 +39,17 @@ public class AddressBookController {
             return "Contact Not Found";
         }
     }
+    
+    @DeleteMapping("/delete")
+    public String deleteContact(@RequestParam String firstName,
+                                @RequestParam String lastName) {
+
+        boolean deleted = service.deleteContact(firstName, lastName);
+
+        if (deleted) {
+            return "Contact Deleted Successfully";
+        } else {
+            return "Contact Not Found";
+        }
+    }
 }
