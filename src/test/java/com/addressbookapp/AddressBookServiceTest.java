@@ -146,4 +146,27 @@ public class AddressBookServiceTest {
 
         assertEquals(2, count);
     }
+    
+    @Test
+    public void givenContacts_whenSortedByName_shouldReturnAlphabeticalOrder() {
+
+        AddressBookService service = new AddressBookService();
+
+        service.createAddressBook("Family");
+
+        ContactPerson c1 = new ContactPerson("Rahul","Verma","","","","","","");
+        ContactPerson c2 = new ContactPerson("AP","Sharma","","","","","","");
+        ContactPerson c3 = new ContactPerson("Anita","Sharma","","","","","","");
+
+        service.addContact("Family", c1);
+        service.addContact("Family", c2);
+        service.addContact("Family", c3);
+
+        List<ContactPerson> sorted = service.sortByName("Family");
+
+        assertEquals(3, sorted.size());
+        assertEquals("AP", sorted.get(0).getFirstName());
+        assertEquals("Anita", sorted.get(1).getFirstName());
+        assertEquals("Rahul", sorted.get(2).getFirstName());
+    }
 }
