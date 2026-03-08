@@ -301,4 +301,22 @@ public class AddressBookServiceTest {
 
         assertTrue(file.exists());
     }
+    
+    @Test
+    void givenContacts_whenWrittenToJsonStream_shouldCreateJsonFile() throws Exception {
+
+        ContactPerson person = new ContactPerson(
+                "Rahul","Sharma","Street1",
+                "Mumbai","MH","400001",
+                "9876543210","rahul@gmail.com"
+        );
+
+        service.addContact("Family", person);
+
+        service.writeToJsonUsingStream();
+
+        File file = new File("addressbook-stream.json");
+
+        assertTrue(file.exists());
+    }
 }
