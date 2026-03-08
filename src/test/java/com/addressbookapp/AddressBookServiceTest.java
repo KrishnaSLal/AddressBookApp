@@ -53,4 +53,31 @@ public class AddressBookServiceTest {
 
         assertTrue(service.getAllContacts().contains(contact));
     }
+    
+    @Test
+    public void givenExistingContact_whenDeleted_shouldReduceListSize() {
+
+        AddressBookService service = new AddressBookService();
+
+        ContactPerson contact = new ContactPerson(
+                "AP","Sharma","","","","","",""
+        );
+
+        service.addContact(contact);
+
+        boolean result = service.deleteContact("AP","Sharma");
+
+        assertTrue(result);
+        assertEquals(0, service.getAllContacts().size());
+    }
+
+    @Test
+    public void givenNonExistingContact_whenDeleted_shouldReturnFalse() {
+
+        AddressBookService service = new AddressBookService();
+
+        boolean result = service.deleteContact("Rahul","Verma");
+
+        assertFalse(result);
+    }
 }
