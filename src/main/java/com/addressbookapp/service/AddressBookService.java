@@ -8,11 +8,12 @@ public class AddressBookService {
 
     private List<ContactPerson> contactList = new ArrayList<>();
 
-    // UC2
+    // UC2 & UC5
     public void addContact(ContactPerson contact) {
         contactList.add(contact);
     }
 
+    // View all contacts
     public List<ContactPerson> getAllContacts() {
         return contactList;
     }
@@ -42,16 +43,9 @@ public class AddressBookService {
     // UC4
     public boolean deleteContact(String firstName, String lastName) {
 
-        for (ContactPerson contact : contactList) {
-
-            if (contact.getFirstName().equals(firstName) &&
-                contact.getLastName().equals(lastName)) {
-
-                contactList.remove(contact);
-                return true;
-            }
-        }
-
-        return false;
+        return contactList.removeIf(contact ->
+                contact.getFirstName().equals(firstName) &&
+                contact.getLastName().equals(lastName)
+        );
     }
 }

@@ -52,4 +52,9 @@ public class AddressBookController {
             return "Contact Not Found";
         }
     }
+    
+    @GetMapping("/contacts")
+    public List<ContactPerson> getAllContacts() {
+        return service.getAllContacts();
+    }
 }
