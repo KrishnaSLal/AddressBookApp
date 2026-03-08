@@ -107,4 +107,21 @@ public class AddressBookServiceTest {
 
         assertEquals(1, result.size());
     }
+    
+    @Test
+    public void givenCity_whenViewed_shouldReturnPersons() {
+
+        AddressBookService service = new AddressBookService();
+        service.createAddressBook("Family");
+
+        ContactPerson contact = new ContactPerson(
+                "AP","Sharma","","Mumbai","Maharashtra","","",""
+        );
+
+        service.addContact("Family", contact);
+
+        List<ContactPerson> result = service.getPersonsByCity("Mumbai");
+
+        assertEquals(1, result.size());
+    }
 }
