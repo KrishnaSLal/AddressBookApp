@@ -25,7 +25,7 @@ public class AddressBookServiceTest {
 
         service.addContact(contact);
 
-        assertEquals(1, service.getContacts().size());
+        assertEquals(1, service.getAllContacts().size());
     }
 
     @Test
@@ -39,7 +39,7 @@ public class AddressBookServiceTest {
         service.addContact(c1);
         service.addContact(c2);
 
-        assertEquals(2, service.getContacts().size());
+        assertEquals(2, service.getAllContacts().size());
     }
 
     @Test
@@ -51,6 +51,6 @@ public class AddressBookServiceTest {
 
         service.addContact(contact);
 
-        assertTrue(service.getContacts().contains(contact));
+        assertTrue(service.getAllContacts().contains(contact));
     }
 }
