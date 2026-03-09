@@ -1,6 +1,8 @@
 package com.addressbookapp.model;
 
 public class ContactPerson {
+
+    private int id;
     private String firstName;
     private String lastName;
     private String address;
@@ -26,7 +28,14 @@ public class ContactPerson {
         this.email = email;
     }
 
-    
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
     public String getFirstName() {
         return firstName;
     }

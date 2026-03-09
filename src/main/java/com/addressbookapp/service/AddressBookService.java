@@ -1,3 +1,4 @@
+
 package com.addressbookapp.service;
 
 import com.addressbookapp.dto.ContactDTO;
@@ -22,113 +23,99 @@ import java.util.stream.Collectors;
 import com.addressbookapp.repository.ContactPersonRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import java.util.concurrent.*;
 
 @Service
 public class AddressBookService {
 	
-    private final List<ContactPerson> contactList1 = new ArrayList<>();
-    private final Map<String, Boolean> contactAdditionStatus = new ConcurrentHashMap<>();
 
-    public void addContact1(ContactPerson contact) {
-        contactList1.add(contact);
+	//UC25
+	
+	private final List<ContactPerson> contactList = new ArrayList<>();
+
+    public void addContact(ContactPerson contact) {
+        contactList.add(contact);
     }
 
-    public List<ContactPerson> getContactList() {
-        return contactList1;
-    }
-
-    public long countEntries() {
-        return contactList1.size();
-    }
-
-    public void addContactsToAddressBook(List<ContactPerson> contacts) {
-        contacts.forEach(this::addContact1);
-    }
-
-    public void addContactsToAddressBookWithThreads(List<ContactPerson> contacts) {
-        ExecutorService executorService = Executors.newFixedThreadPool(3);
-
-        for (ContactPerson contact : contacts) {
-            contactAdditionStatus.put(contact.getFirstName(), false);
-
-            executorService.submit(() -> {
-                try {
-                    System.out.println("Adding contact: " + contact.getFirstName()
-                            + " by thread: " + Thread.currentThread().getName());
-
-                    addContact1(contact);
-
-                    contactAdditionStatus.put(contact.getFirstName(), true);
-
-                    System.out.println("Added contact: " + contact.getFirstName()
-                            + " by thread: " + Thread.currentThread().getName());
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            });
+    public void updateContact(ContactPerson updatedContact) {
+        for (int i = 0; i < contactList.size(); i++) {
+            if (contactList.get(i).getId() == updatedContact.getId()) {
+                contactList.set(i, updatedContact);
+                return;
+            }
         }
+    }
 
-        executorService.shutdown();
+    public ContactPerson getContactById(int id) {
+        return contactList.stream()
+                .filter(contact -> contact.getId() == id)
+                .findFirst()
+                .orElse(null);
+    }
 
-        while (!executorService.isTerminated()) {
-            // wait until all tasks complete
-        }
+    public int countEntries() {
+        return contactList.size();
     }
 
     public boolean isContactAdded(String firstName) {
-        return contactAdditionStatus.getOrDefault(firstName, false);
+        return contactList.stream()
+                .anyMatch(contact -> contact.getFirstName().equals(firstName));
     }
 
-	private final List<ContactPerson> contactList = new ArrayList<>();
+    public void addContactsToAddressBookWithThreads(List<ContactPerson> contacts) {
+        Map<Integer, Boolean> contactAdditionStatus = new HashMap<>();
+        List<Thread> threads = new ArrayList<>();
 
-    public void setContacts(List<ContactPerson> contacts) {
-        contactList1.clear();
-        contactList1.addAll(contacts);
+        for (ContactPerson contact : contacts) {
+            Runnable task = () -> {
+                contactAdditionStatus.put(contact.hashCode(), false);
+                System.out.println("Employee being added: " + contact.getFirstName());
+
+                addContact(contact);
+
+                contactAdditionStatus.put(contact.hashCode(), true);
+                System.out.println("Employee added: " + contact.getFirstName());
+            };
+
+            Thread thread = new Thread(task, contact.getFirstName());
+            threads.add(thread);
+            thread.start();
+        }
+
+        for (Thread thread : threads) {
+            try {
+                thread.join();
+            } catch (InterruptedException e) {
+                Thread.currentThread().interrupt();
+                throw new RuntimeException("Thread interrupted", e);
+            }
+        }
     }
-
-    public List<ContactPerson> getContacts() {
-        return contactList1;
-    }
-
-    public void addContact(ContactPerson contact) {
-        contactList1.add(contact);
-    }
-
-//    public void updateContact(ContactPerson updatedContact) {
-//        Optional<ContactPerson> existing = contactList1.stream()
-//                .filter(contact -> contact.getId() == updatedContact.getId())
-//                .findFirst();
-//
-//        existing.ifPresent(contact -> {
-//            contact.setFirstName(updatedContact.getFirstName());
-//            contact.setLastName(updatedContact.getLastName());
-//            contact.setAddress(updatedContact.getAddress());
-//            contact.setCity(updatedContact.getCity());
-//            contact.setState(updatedContact.getState());
-//            contact.setZip(updatedContact.getZip());
-//            contact.setPhoneNumber(updatedContact.getPhoneNumber());
-//            contact.setEmail(updatedContact.getEmail());
-//        });
-//    }
-//
-//    public ContactPerson getContactById(int id) {
-//        return contactList1.stream()
-//                .filter(contact -> contact.getId() == id)
-//                .findFirst()
-//                .orElse(null);
-//    }
 	
 	//UC22
 	
-    private final ContactPersonRepository repository;
+    private ContactPersonRepository repository;
 
+    // no-arg constructor for old test cases
+    public AddressBookService() {
+    }
+
+    // parameterized constructor for DB/repository use
     public AddressBookService(ContactPersonRepository repository) {
         this.repository = repository;
     }
 
     public ContactPerson saveContact(ContactPerson person) {
-        return repository.save(person);
+
+        if(person == null) {
+            return null;
+        }
+
+        // add to default address book
+        createAddressBook("Default");
+
+        addContact("Default", person);
+
+        return person;
     }
 
     public List<ContactPerson> getAllContacts() {
@@ -547,5 +534,5 @@ public class AddressBookService {
                 .sorted(Comparator.comparing(ContactPerson::getZip))
                 .collect(Collectors.toList());
     }
-
+    
 }
