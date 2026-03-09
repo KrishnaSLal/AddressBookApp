@@ -1,15 +1,27 @@
 package com.addressbookapp;
 
+import com.addressbookapp.model.ContactPerson;
+import com.addressbookapp.service.AddressBookService;
 import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.boot.test.context.SpringBootTest;
+
+import java.util.Arrays;
+import java.util.List;
 
 import static io.restassured.RestAssured.given;
 import static org.hamcrest.Matchers.equalTo;
 import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
 
+@SpringBootTest
 public class AddressBookRestServiceTest {
+
+    @Autowired
+    private AddressBookService addressBookService;
 
     @BeforeEach
     void setUp() {
@@ -19,76 +31,47 @@ public class AddressBookRestServiceTest {
     }
 
     @Test
-    void givenMultipleContacts_whenAddedToJsonServer_shouldIncreaseCount() {
+    void givenContact_WhenUpdatedInJsonServer_ShouldSyncWithMemory() {
+        ContactPerson newContact = new ContactPerson(
+                "Rahul", "Sharma", "Street1",
+                "Mumbai", "MH", "400001",
+                "9876543210", "rahul@test.com"
+        );
 
-        int beforeCount =
-                given()
-                        .contentType(ContentType.JSON)
+        ContactPerson addedContact = given()
+                .contentType(ContentType.JSON)
+                .body(newContact)
                 .when()
-                        .get()
+                .post()
                 .then()
-                        .statusCode(200)
-                        .extract()
-                        .jsonPath()
-                        .getList("$")
-                        .size();
+                .statusCode(201)
+                .extract()
+                .as(ContactPerson.class);
 
-        String contact1 = """
-                {
-                  "firstName": "Rahul",
-                  "lastName": "Sharma",
-                  "address": "Street1",
-                  "city": "Mumbai",
-                  "state": "MH",
-                  "zip": "400001",
-                  "phoneNumber": "9876543210",
-                  "email": "rahul@test.com"
-                }
-                """;
+        addressBookService.addContact(addedContact);
 
-        String contact2 = """
-                {
-                  "firstName": "Anita",
-                  "lastName": "Singh",
-                  "address": "Street2",
-                  "city": "Delhi",
-                  "state": "Delhi",
-                  "zip": "110001",
-                  "phoneNumber": "9999999999",
-                  "email": "anita@test.com"
-                }
-                """;
+        addedContact.setCity("Pune");
+        addedContact.setState("Maharashtra");
+        addedContact.setPhoneNumber("9998887776");
 
         given()
                 .contentType(ContentType.JSON)
-                .body(contact1)
-        .when()
-                .post()
-        .then()
-                .statusCode(201)
-                .body("firstName", equalTo("Rahul"));
-
-        given()
-                .contentType(ContentType.JSON)
-                .body(contact2)
-        .when()
-                .post()
-        .then()
-                .statusCode(201)
-                .body("firstName", equalTo("Anita"));
-
-        int afterCount =
-                given()
-                        .contentType(ContentType.JSON)
+                .body(addedContact)
                 .when()
-                        .get()
+                .put("/{id}", addedContact.getId())
                 .then()
-                        .statusCode(200)
-                        .extract()
-                        .jsonPath()
-                        .getList("$")
-                        .size();
+                .statusCode(200)
+                .body("city", equalTo("Pune"))
+                .body("state", equalTo("Maharashtra"))
+                .body("phoneNumber", equalTo("9998887776"));
 
-        assertEquals(beforeCount + 2, afterCount);
+        addressBookService.updateContact(addedContact);
+
+        ContactPerson updatedInMemory = addressBookService.getContactById(addedContact.getId());
+
+        assertNotNull(updatedInMemory);
+        assertEquals("Pune", updatedInMemory.getCity());
+        assertEquals("Maharashtra", updatedInMemory.getState());
+        assertEquals("9998887776", updatedInMemory.getPhoneNumber());
     }
 }
