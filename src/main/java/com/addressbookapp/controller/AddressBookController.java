@@ -10,9 +10,15 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
+
 @RestController
 @RequestMapping("/addressbook")
 public class AddressBookController {
+    
+    private static final Logger log =
+            LoggerFactory.getLogger(AddressBookController.class);
 
     private final AddressBookService service;
 
@@ -32,17 +38,20 @@ public class AddressBookController {
     public String addContact(@RequestParam String bookName,
                              @RequestBody ContactPerson person) {
 
+        log.info("Request received to add contact in book: {}", bookName);
         service.addContact(bookName, person);
+        log.info("Contact added successfully");
+
         return "Contact Added Successfully";
     }
 
-    // View Contacts
+    // View Contacts by Book
     @GetMapping("/contacts")
     public List<ContactPerson> getContacts(@RequestParam String bookName) {
         return service.getContacts(bookName);
     }
 
-    // Delete Contact
+    // Delete Contact by Name
     @DeleteMapping("/delete")
     public String deleteContact(@RequestParam String bookName,
                                 @RequestParam String firstName,
@@ -76,6 +85,7 @@ public class AddressBookController {
         return "Contact deleted successfully";
     }
     
+    // Update contact
     @PutMapping("/update/{id}")
     public ContactPerson updateContact(
             @PathVariable Long id,

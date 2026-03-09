@@ -20,10 +20,30 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.stream.Collectors;
 import com.addressbookapp.repository.ContactPersonRepository;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 @Service
 public class AddressBookService {
 	
+	//UC20
+	
+	private static final Logger log = LoggerFactory.getLogger(AddressBookService.class);
+
+    public ContactPerson updateContact1(Long id, ContactDTO dto) {
+
+        log.info("Updating contact with id: {}", id);
+
+        ContactPerson contact = repository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Contact not found"));
+
+        contact.setFirstName(dto.getFirstName());
+        contact.setLastName(dto.getLastName());
+
+        log.info("Contact updated successfully for id: {}", id);
+
+        return repository.save(contact);
+    }
 	
 	//UC19
 	
