@@ -39,7 +39,9 @@ public class AddressBookController {
                              @RequestBody ContactPerson person) {
 
         log.info("Request received to add contact in book: {}", bookName);
+
         service.addContact(bookName, person);
+
         log.info("Contact added successfully");
 
         return "Contact Added Successfully";

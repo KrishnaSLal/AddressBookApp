@@ -28,7 +28,7 @@ public class AddressBookService {
 	
 	//UC20
 	
-	private static final Logger log = LoggerFactory.getLogger(AddressBookService.class);
+    private static final Logger log = LoggerFactory.getLogger(AddressBookService.class);
 
     public ContactPerson updateContact1(Long id, ContactDTO dto) {
 
@@ -44,7 +44,7 @@ public class AddressBookService {
 
         return repository.save(contact);
     }
-	
+
 	//UC19
 	
 	public ContactPerson updateContact(Long id, ContactDTO dto) {
