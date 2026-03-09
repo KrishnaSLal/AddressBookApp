@@ -22,48 +22,102 @@ import java.util.stream.Collectors;
 import com.addressbookapp.repository.ContactPersonRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import java.util.concurrent.*;
 
 @Service
 public class AddressBookService {
 	
+    private final List<ContactPerson> contactList1 = new ArrayList<>();
+    private final Map<String, Boolean> contactAdditionStatus = new ConcurrentHashMap<>();
+
+    public void addContact1(ContactPerson contact) {
+        contactList1.add(contact);
+    }
+
+    public List<ContactPerson> getContactList() {
+        return contactList1;
+    }
+
+    public long countEntries() {
+        return contactList1.size();
+    }
+
+    public void addContactsToAddressBook(List<ContactPerson> contacts) {
+        contacts.forEach(this::addContact1);
+    }
+
+    public void addContactsToAddressBookWithThreads(List<ContactPerson> contacts) {
+        ExecutorService executorService = Executors.newFixedThreadPool(3);
+
+        for (ContactPerson contact : contacts) {
+            contactAdditionStatus.put(contact.getFirstName(), false);
+
+            executorService.submit(() -> {
+                try {
+                    System.out.println("Adding contact: " + contact.getFirstName()
+                            + " by thread: " + Thread.currentThread().getName());
+
+                    addContact1(contact);
+
+                    contactAdditionStatus.put(contact.getFirstName(), true);
+
+                    System.out.println("Added contact: " + contact.getFirstName()
+                            + " by thread: " + Thread.currentThread().getName());
+                } catch (Exception e) {
+                    e.printStackTrace();
+                }
+            });
+        }
+
+        executorService.shutdown();
+
+        while (!executorService.isTerminated()) {
+            // wait until all tasks complete
+        }
+    }
+
+    public boolean isContactAdded(String firstName) {
+        return contactAdditionStatus.getOrDefault(firstName, false);
+    }
+
 	private final List<ContactPerson> contactList = new ArrayList<>();
 
     public void setContacts(List<ContactPerson> contacts) {
-        contactList.clear();
-        contactList.addAll(contacts);
+        contactList1.clear();
+        contactList1.addAll(contacts);
     }
 
     public List<ContactPerson> getContacts() {
-        return contactList;
+        return contactList1;
     }
 
     public void addContact(ContactPerson contact) {
-        contactList.add(contact);
+        contactList1.add(contact);
     }
 
-    public void updateContact(ContactPerson updatedContact) {
-        Optional<ContactPerson> existing = contactList.stream()
-                .filter(contact -> contact.getId() == updatedContact.getId())
-                .findFirst();
-
-        existing.ifPresent(contact -> {
-            contact.setFirstName(updatedContact.getFirstName());
-            contact.setLastName(updatedContact.getLastName());
-            contact.setAddress(updatedContact.getAddress());
-            contact.setCity(updatedContact.getCity());
-            contact.setState(updatedContact.getState());
-            contact.setZip(updatedContact.getZip());
-            contact.setPhoneNumber(updatedContact.getPhoneNumber());
-            contact.setEmail(updatedContact.getEmail());
-        });
-    }
-
-    public ContactPerson getContactById(int id) {
-        return contactList.stream()
-                .filter(contact -> contact.getId() == id)
-                .findFirst()
-                .orElse(null);
-    }
+//    public void updateContact(ContactPerson updatedContact) {
+//        Optional<ContactPerson> existing = contactList1.stream()
+//                .filter(contact -> contact.getId() == updatedContact.getId())
+//                .findFirst();
+//
+//        existing.ifPresent(contact -> {
+//            contact.setFirstName(updatedContact.getFirstName());
+//            contact.setLastName(updatedContact.getLastName());
+//            contact.setAddress(updatedContact.getAddress());
+//            contact.setCity(updatedContact.getCity());
+//            contact.setState(updatedContact.getState());
+//            contact.setZip(updatedContact.getZip());
+//            contact.setPhoneNumber(updatedContact.getPhoneNumber());
+//            contact.setEmail(updatedContact.getEmail());
+//        });
+//    }
+//
+//    public ContactPerson getContactById(int id) {
+//        return contactList1.stream()
+//                .filter(contact -> contact.getId() == id)
+//                .findFirst()
+//                .orElse(null);
+//    }
 	
 	//UC22
 	
