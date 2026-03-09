@@ -74,4 +74,23 @@ public class AddressBookRestServiceTest {
         assertEquals("Maharashtra", updatedInMemory.getState());
         assertEquals("9998887776", updatedInMemory.getPhoneNumber());
     }
+    
+    @Test
+    void given3Contacts_WhenAddedUsingThreads_ShouldMatchEntryCount() {
+        AddressBookService service = new AddressBookService();
+
+        List<ContactPerson> contacts = Arrays.asList(
+                new ContactPerson("Rahul", "Sharma", "Street1", "Mumbai", "MH", "400001", "9876543210", "rahul@test.com"),
+                new ContactPerson("Anita", "Singh", "Street2", "Delhi", "Delhi", "110001", "9999999999", "anita@test.com"),
+                new ContactPerson("Arun", "Das", "Street3", "Kochi", "Kerala", "682001", "8888888888", "arun@test.com")
+        );
+
+        service.addContactsToAddressBookWithThreads(contacts);
+
+        Assertions.assertEquals(3, service.countEntries());
+        Assertions.assertTrue(service.isContactAdded("Rahul"));
+        Assertions.assertTrue(service.isContactAdded("Anita"));
+        Assertions.assertTrue(service.isContactAdded("Arun"));
+    }
+}
 }
