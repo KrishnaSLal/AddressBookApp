@@ -4,6 +4,8 @@ import com.addressbookapp.model.ContactPerson;
 import com.addressbookapp.service.AddressBookService;
 import io.restassured.RestAssured;
 import io.restassured.http.ContentType;
+
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -92,5 +94,4 @@ public class AddressBookRestServiceTest {
         Assertions.assertTrue(service.isContactAdded("Anita"));
         Assertions.assertTrue(service.isContactAdded("Arun"));
     }
-}
 }
