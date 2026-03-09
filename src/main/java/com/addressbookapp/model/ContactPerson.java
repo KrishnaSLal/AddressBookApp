@@ -32,12 +32,35 @@ public class ContactPerson {
         this.phoneNumber = phoneNumber;
         this.email = email;
     }
+    
+    public ContactPerson(int id, String firstName, String lastName, String address,
+            String city, String state, String zip,
+            String phoneNumber, String email) {
+        this.id = id;
+        this.firstName = firstName;
+        this.lastName = lastName;
+        this.address = address;
+        this.city = city;
+        this.state = state;
+        this.zip = zip;
+        this.phoneNumber = phoneNumber;
+        this.email = email;
+}
+
+
 
     public ContactPerson(String string, String string2, String string3, String string4, String string5, String string6,
 			String string7) {
 		// TODO Auto-generated constructor stub
 	}
 
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
 
 	public String getFirstName() { return firstName; }
     public void setFirstName(String firstName) { this.firstName = firstName; }

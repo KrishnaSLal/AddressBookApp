@@ -26,6 +26,45 @@ import org.slf4j.LoggerFactory;
 @Service
 public class AddressBookService {
 	
+	private final List<ContactPerson> contactList = new ArrayList<>();
+
+    public void setContacts(List<ContactPerson> contacts) {
+        contactList.clear();
+        contactList.addAll(contacts);
+    }
+
+    public List<ContactPerson> getContacts() {
+        return contactList;
+    }
+
+    public void addContact(ContactPerson contact) {
+        contactList.add(contact);
+    }
+
+    public void updateContact(ContactPerson updatedContact) {
+        Optional<ContactPerson> existing = contactList.stream()
+                .filter(contact -> contact.getId() == updatedContact.getId())
+                .findFirst();
+
+        existing.ifPresent(contact -> {
+            contact.setFirstName(updatedContact.getFirstName());
+            contact.setLastName(updatedContact.getLastName());
+            contact.setAddress(updatedContact.getAddress());
+            contact.setCity(updatedContact.getCity());
+            contact.setState(updatedContact.getState());
+            contact.setZip(updatedContact.getZip());
+            contact.setPhoneNumber(updatedContact.getPhoneNumber());
+            contact.setEmail(updatedContact.getEmail());
+        });
+    }
+
+    public ContactPerson getContactById(int id) {
+        return contactList.stream()
+                .filter(contact -> contact.getId() == id)
+                .findFirst()
+                .orElse(null);
+    }
+	
 	//UC22
 	
     private final ContactPersonRepository repository;
