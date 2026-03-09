@@ -1,3 +1,4 @@
+
 package com.addressbookapp.service;
 
 import com.addressbookapp.dto.ContactDTO;
@@ -26,16 +27,33 @@ import org.slf4j.LoggerFactory;
 @Service
 public class AddressBookService {
 	
+
+	
 	//UC22
 	
-    private final ContactPersonRepository repository;
+    private ContactPersonRepository repository;
 
+    // no-arg constructor for old test cases
+    public AddressBookService() {
+    }
+
+    // parameterized constructor for DB/repository use
     public AddressBookService(ContactPersonRepository repository) {
         this.repository = repository;
     }
 
     public ContactPerson saveContact(ContactPerson person) {
-        return repository.save(person);
+
+        if(person == null) {
+            return null;
+        }
+
+        // add to default address book
+        createAddressBook("Default");
+
+        addContact("Default", person);
+
+        return person;
     }
 
     public List<ContactPerson> getAllContacts() {

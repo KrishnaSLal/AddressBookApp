@@ -33,31 +33,27 @@ public class AddressBookRestServiceTest {
                         .getList("$")
                         .size();
 
-        String contact1 = """
-                {
-                  "firstName": "Rahul",
-                  "lastName": "Sharma",
-                  "address": "Street1",
-                  "city": "Mumbai",
-                  "state": "MH",
-                  "zip": "400001",
-                  "phoneNumber": "9876543210",
-                  "email": "rahul@test.com"
-                }
-                """;
+        String contact1 = "{"
+                + "\"firstName\":\"Rahul\","
+                + "\"lastName\":\"Sharma\","
+                + "\"address\":\"Street1\","
+                + "\"city\":\"Mumbai\","
+                + "\"state\":\"MH\","
+                + "\"zip\":\"400001\","
+                + "\"phoneNumber\":\"9876543210\","
+                + "\"email\":\"rahul@test.com\""
+                + "}";
 
-        String contact2 = """
-                {
-                  "firstName": "Anita",
-                  "lastName": "Singh",
-                  "address": "Street2",
-                  "city": "Delhi",
-                  "state": "Delhi",
-                  "zip": "110001",
-                  "phoneNumber": "9999999999",
-                  "email": "anita@test.com"
-                }
-                """;
+        String contact2 = "{"
+                + "\"firstName\":\"Anita\","
+                + "\"lastName\":\"Singh\","
+                + "\"address\":\"Street2\","
+                + "\"city\":\"Delhi\","
+                + "\"state\":\"Delhi\","
+                + "\"zip\":\"110001\","
+                + "\"phoneNumber\":\"9999999999\","
+                + "\"email\":\"anita@test.com\""
+                + "}";
 
         given()
                 .contentType(ContentType.JSON)
