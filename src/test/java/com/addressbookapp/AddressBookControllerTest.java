@@ -145,4 +145,5 @@ public class AddressBookControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.firstName").value("Rahul"));
     }
+
 }
