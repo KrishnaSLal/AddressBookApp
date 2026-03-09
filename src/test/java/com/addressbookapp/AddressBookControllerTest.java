@@ -145,5 +145,25 @@ public class AddressBookControllerTest {
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.firstName").value("Rahul"));
     }
+    
+    @Test
+    void givenContact_whenSaved_shouldReturnSavedContact() throws Exception {
 
+        ContactPerson person = new ContactPerson(
+                "Rahul","Sharma","Street1",
+                "Mumbai","MH","400001",
+                "9876543210","rahul@test.com"
+        );
+
+        when(service.saveContact(org.mockito.ArgumentMatchers.any(ContactPerson.class)))
+                .thenReturn(person);
+
+        mockMvc.perform(post("/addressbook/save")
+                .contentType(org.springframework.http.MediaType.APPLICATION_JSON)
+                .content(mapper.writeValueAsString(person)))
+                .andExpect(status().isOk())
+                .andExpect(jsonPath("$.firstName").value("Rahul"))
+                .andExpect(jsonPath("$.lastName").value("Sharma"))
+                .andExpect(jsonPath("$.city").value("Mumbai"));
+    }
 }
