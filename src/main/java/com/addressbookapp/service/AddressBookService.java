@@ -26,6 +26,44 @@ import org.slf4j.LoggerFactory;
 @Service
 public class AddressBookService {
 	
+	//UC22
+	
+    private final ContactPersonRepository repository;
+
+    public AddressBookService(ContactPersonRepository repository) {
+        this.repository = repository;
+    }
+
+    public ContactPerson saveContact(ContactPerson person) {
+        return repository.save(person);
+    }
+
+    public List<ContactPerson> getAllContacts() {
+        return repository.findAll();
+    }
+
+    public void deleteContact(Long id) {
+        repository.deleteById(id);
+    }
+
+    public ContactPerson updateContact(Long id, ContactDTO dto) {
+
+        ContactPerson contact = repository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Contact not found"));
+
+        contact.setFirstName(dto.getFirstName());
+        contact.setLastName(dto.getLastName());
+        contact.setAddress(dto.getAddress());
+        contact.setCity(dto.getCity());
+        contact.setState(dto.getState());
+        contact.setZip(dto.getZip());
+        contact.setPhoneNumber(dto.getPhoneNumber());
+        contact.setEmail(dto.getEmail());
+
+        return repository.save(contact);
+    }
+
+	
 	//UC20
 	
     private static final Logger log = LoggerFactory.getLogger(AddressBookService.class);
@@ -45,51 +83,51 @@ public class AddressBookService {
         return repository.save(contact);
     }
 
-	//UC19
-	
-	public ContactPerson updateContact(Long id, ContactDTO dto) {
-
-	    ContactPerson contact = repository.findById(id)
-	            .orElseThrow(() -> new RuntimeException("Contact not found"));
-
-	    contact.setFirstName(dto.getFirstName());
-	    contact.setLastName(dto.getLastName());
-	    contact.setAddress(dto.getAddress());
-	    contact.setCity(dto.getCity());
-	    contact.setState(dto.getState());
-	    contact.setZip(dto.getZip());
-	    contact.setPhoneNumber(dto.getPhoneNumber());
-	    contact.setEmail(dto.getEmail());
-
-	    return repository.save(contact);
-	}
-	
-	private final ContactPersonRepository repository;
-	
-    public AddressBookService(ContactPersonRepository repository) {
-        this.repository = repository;
-    }
-
-    public AddressBookService() {
-	    this.repository = null;
-	}
-    
-    public ContactPerson saveContact(ContactPerson person) {
-
-        if (repository == null) {
-            return person; // used for unit tests
-        }
-
-        return repository.save(person);
-    }
-
-    public List<ContactPerson> getAllContacts() {
-        return repository.findAll();
-    }
-
-    public void deleteContact(Long id) {
-        repository.deleteById(id);
-    }
+//	//UC19
+//	
+//	public ContactPerson updateContact(Long id, ContactDTO dto) {
+//
+//	    ContactPerson contact = repository.findById(id)
+//	            .orElseThrow(() -> new RuntimeException("Contact not found"));
+//
+//	    contact.setFirstName(dto.getFirstName());
+//	    contact.setLastName(dto.getLastName());
+//	    contact.setAddress(dto.getAddress());
+//	    contact.setCity(dto.getCity());
+//	    contact.setState(dto.getState());
+//	    contact.setZip(dto.getZip());
+//	    contact.setPhoneNumber(dto.getPhoneNumber());
+//	    contact.setEmail(dto.getEmail());
+//
+//	    return repository.save(contact);
+//	}
+//	
+//	private final ContactPersonRepository repository;
+//	
+//    public AddressBookService(ContactPersonRepository repository) {
+//        this.repository = repository;
+//    }
+//
+//    public AddressBookService() {
+//	    this.repository = null;
+//	}
+//    
+//    public ContactPerson saveContact(ContactPerson person) {
+//
+//        if (repository == null) {
+//            return person; // used for unit tests
+//        }
+//
+//        return repository.save(person);
+//    }
+//
+//    public List<ContactPerson> getAllContacts() {
+//        return repository.findAll();
+//    }
+//
+//    public void deleteContact(Long id) {
+//        repository.deleteById(id);
+//    }
 
 	
 	//UC6
