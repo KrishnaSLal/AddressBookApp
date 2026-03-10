@@ -13,3 +13,6 @@ Create a `ContactPerson` with complete details and store it in the Address Book.
 
 ## 🎯 Outcome
 A new contact can be created with all required fields in the Address Book.
+
+🔗*Code Link* <br>
+[UC1 - CreateContacts](https://github.com/KrishnaSLal/AddressBookApp/tree/feature/UC1-CreateContacts)
