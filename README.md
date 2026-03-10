@@ -1,18 +1,25 @@
-# 📑 AddressBookApp
----
+# UC1 - Create Address Book
 
-# ✅ UC1 - To Create a New Contact
+## ✅ UC1 - Ability to create an Address Book system that can store contact persons.
+
 ## 📌 Objective
-Create a `ContactPerson` with complete details and store it in the Address Book.
+Create an Address Book application capable of storing contact details of a person.
 
 ## 🛠 Implementation Details
-- Program developed using Java
-- Followed Object-Oriented Programming principles
-- Each UC maintained in a separate Git branch
-- Proper naming convention, indentation, and code hygiene followed
+- Created `ContactPerson` class
+- Added fields:
+  - First Name
+  - Last Name
+  - Address
+  - City
+  - State
+  - Zip
+  - Phone Number
+  - Email
+- Created `AddressBook` class to manage contacts
 
 ## 🎯 Outcome
-A new contact can be created with all required fields in the Address Book.
+The Address Book system structure is created and ready to store contacts.
 
 ---
 
