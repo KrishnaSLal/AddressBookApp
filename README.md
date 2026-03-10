@@ -1,6 +1,6 @@
-# UC1 - Create Address Book
+# 📑 AddressBookApp
 
-## ✅ UC1 - Ability to create an Address Book system that can store contact persons.
+# ✅ UC1 - Ability to create an Address Book system that can store contact persons.
 
 ## 📌 Objective
 Create an Address Book application capable of storing contact details of a person.
