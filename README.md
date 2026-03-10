@@ -1,24 +1,23 @@
 # 📑 AdressBookApp
 
 ---
-
-# ✅ UC17 - Retrieve All Entries from Database
+# ✅ UC17 - Update Contact Information and Sync with DB
 
 ## ✅ Use Case
-Ability for the AddressBook Service to retrieve all entries from the database.
+Ability to update the contact information in the Address Book for a person and ensure that the contact information in memory is in sync with the database.
 
 ## 📌 Objective
-Connect Address Book application with database and fetch all records.
+Update a person's contact details and keep in-memory data synchronized with DB.
 
 ## 🛠 Implementation Details
-- Used JDBC to connect with database
-- Retrieved all contacts from DB
-- Followed JUnit Test and TDD approach
-- Ensured entities match the ER model
+- Used JDBC for CRUD operations
+- Used `PreparedStatement` for specific record retrieval
+- Updated contact details in DB
+- Implemented `equals()` for sync verification
+- Verified sync using JUnit test cases
 
 ## 🎯 Outcome
-All Address Book entries can be retrieved from the database.
----
+Updated contact information stays consistent in both memory and database.
 
 🔗*Code Link* <br>
 [UC17 - Update&Sync](https://github.com/KrishnaSLal/AddressBookApp/tree/feature/UC17-update-contact-and-sync-with-db)
