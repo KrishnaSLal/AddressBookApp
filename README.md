@@ -1,23 +1,22 @@
 # 📑 AddressBookApp
 ---
 
-# UC16 - Read/Write Address Book as JSON File
+# ✅ UC16 - Retrieve All Entries from Database
 
 ## ✅ Use Case
-Ability to read or write the Address Book with persons' contact as JSON file.
+Ability for the AddressBook Service to retrieve all entries from the database.
 
 ## 📌 Objective
-Store Address Book data in JSON format and read it back.
+Connect Address Book application with database and fetch all records.
 
 ## 🛠 Implementation Details
-- Used GSON library
-- Serialized Address Book objects into JSON
-- Deserialized JSON into Java objects
+- Used JDBC to connect with database
+- Retrieved all contacts from DB
+- Followed JUnit Test and TDD approach
+- Ensured entities match the ER model
 
 ## 🎯 Outcome
-Address Book supports JSON-based persistence.
-
----
+All Address Book entries can be retrieved from the database.
 
 🔗*Code Link* <br>
 [UC16 - RetrieveContacts](https://github.com/KrishnaSLal/AddressBookApp/tree/feature/UC16-retrieve-contacts-from-database)
