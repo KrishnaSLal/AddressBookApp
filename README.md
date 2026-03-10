@@ -1,20 +1,29 @@
 # 📑 AddressBookApp
 ---
 
-## ✅ UC2 - Ability to Edit an Existing Contact Person Using their Name.
+# ✅ UC2 - Add New Contact
+
+## ✅ Use Case
+Ability to add a new contact to the Address Book.
 
 ## 📌 Objective
-Allow modification of a person's contact details by identifying them with name.
+Allow the user to enter contact details and store them in the Address Book.
 
 ## 🛠 Implementation Details
-- Used Console input to edit person details
-- Searched existing contact by name
-- Updated required fields in the Address Book
+- Created method to add a contact person
+- Stored contact information in a collection (List)
+- Accepted user input for:
+  - First Name
+  - Last Name
+  - Address
+  - City
+  - State
+  - Zip
+  - Phone Number
+  - Email
 
 ## 🎯 Outcome
-Existing contact details can be modified successfully.
-
----
+Users can successfully add new contacts to the Address Book.
 
 🔗*Code Link* <br>
 [UC2 - AddContacts](https://github.com/KrishnaSLal/AddressBookApp/tree/feature/UC2-add-contact)
