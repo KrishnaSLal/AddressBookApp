@@ -20,6 +20,6 @@ Existing contact details can be modified successfully.
 
 ---
 🔗*Code Link* <br>
-[UC2 - EditContact](https://github.com/KrishnaSLal/AddressBookApp/tree/feature/UC3-edit-contact)
+[UC3 - EditContact](https://github.com/KrishnaSLal/AddressBookApp/tree/feature/UC3-edit-contact)
 
 ---
