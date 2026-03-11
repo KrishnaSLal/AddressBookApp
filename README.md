@@ -18,6 +18,7 @@ Store more than one contact in the Address Book.
 ## 🎯 Outcome
 Multiple contacts can be added and managed in the Address Book.
 
+---
 
 🔗*Code Link* <br>
 [UC5 - AddMultipleContacts](https://github.com/KrishnaSLal/AddressBookApp/tree/feature/UC5-add-multiple-contacts)
